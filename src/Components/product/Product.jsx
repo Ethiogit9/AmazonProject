@@ -29,6 +29,7 @@ function Product() {
               key={index}
               flex={false}
               renderDesc={false}
+              renderAdd={true}
             />
           ))}
         </div>

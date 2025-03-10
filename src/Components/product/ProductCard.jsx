@@ -4,12 +4,35 @@ import { Rating } from "@mui/material";
 import CurrencyFormat from "../CurrencyFormat/CurrencyFormat";
 import style from "./product.module.css";
 import { Link } from "react-router-dom";
+import { useContext } from "react";
+import { DataContext } from "../DataProvider/DataProvider";
+import { Type } from "../../utility/action.type";
 // import style from "./product.module.css";
 
-function ProductCard({ item, renderDesc, flex }) {
+function ProductCard({ item, renderDesc, renderAdd, flex }) {
   const { title, price, rating, image, description, id } = item;
+
+  // eslint-disable-next-line no-unused-vars
+  const [state, dispatch] = useContext(DataContext);
+
+  const addToCart = () => {
+    dispatch({
+      type: Type.ADD_TO_BASKET,
+      item: {
+        title,
+        price,
+        image,
+        rating,
+        id,
+        description,
+      },
+    });
+  };
+
   return (
-    <div className={`${style.card__container} ${flex && style.product__flexed}`}>
+    <div
+      className={`${style.card__container} ${flex && style.product__flexed}`}
+    >
       <Link to={`/product/${id}`}>
         {/* localhost/product/3 */}
         <img src={image} alt="" />
@@ -17,7 +40,7 @@ function ProductCard({ item, renderDesc, flex }) {
       <div>
         {/* title */}
         <h3>{title}</h3>
-        {renderDesc && <p style={{maxWidth:"750px"}}>{description}</p>}
+        {renderDesc && <p style={{ maxWidth: "750px" }}>{description}</p>}
         {/* rating */}
         <div className={style.rating}>
           <Rating
@@ -32,7 +55,11 @@ function ProductCard({ item, renderDesc, flex }) {
         <div>
           <CurrencyFormat amount={price} />
         </div>
-        <button className={style.button}>Add to cart</button>
+        {renderAdd && (
+          <button onClick={addToCart} className={style.button}>
+            Add to cart
+          </button>
+        )}
       </div>
     </div>
   );

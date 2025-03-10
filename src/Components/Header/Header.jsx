@@ -1,10 +1,17 @@
+/* eslint-disable no-unused-vars */
 import style from "./Header.module.css";
 import { SlLocationPin } from "react-icons/sl";
 import { BsSearch } from "react-icons/bs";
 import LowerHeader from "./LowerHeader";
 import { Link } from "react-router-dom";
+import { useContext } from "react";
+import { DataContext } from "../DataProvider/DataProvider";
 
 function Header() {
+  const [{ basket }, dispatch] = useContext(DataContext);
+  const totalItem = basket?.reduce((amount, item) => {
+    return amount + item.amount;
+  }, 0);
   return (
     <div className={style.fixed_Header}>
       {/* upper header */}
@@ -65,7 +72,7 @@ function Header() {
             </Link>
             <Link to="/cart" className={style.cart}>
               <img className={style.cart} src="/public/cart2.png" alt="" />
-              <span>0</span>
+              <span>{totalItem}</span>
               {/* <div>Cart</div> */}
             </Link>
           </div>

@@ -39,6 +39,7 @@ const Result = () => {
           <div className={classes.product_container}>
             {result.map((product, index) => (
               <ProductCard
+                renderAdd={true}
                 key={index}
                 item={product}
                 flex={false}
