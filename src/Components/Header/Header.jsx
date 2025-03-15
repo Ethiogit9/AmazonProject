@@ -1,90 +1,111 @@
 /* eslint-disable no-unused-vars */
-import style from "./Header.module.css";
+// eslint-disable-next-line no-unused-vars
+import { FaSearch } from "react-icons/fa";
 import { SlLocationPin } from "react-icons/sl";
-import { BsSearch } from "react-icons/bs";
+import { BiCartAdd } from "react-icons/bi";
+import classes from "./Header.module.css";
 import LowerHeader from "./LowerHeader";
 import { Link } from "react-router-dom";
-import { useContext } from "react";
+import React, { useContext } from "react";
 import { DataContext } from "../DataProvider/DataProvider";
+import { auth } from "../../utility/firebase";
+// import { Type } from "../../Utility/action.type";
 
 function Header() {
-  const [{ basket }, dispatch] = useContext(DataContext);
+  const [{ basket, user }, dispatch] = useContext(DataContext);
+
   const totalItem = basket?.reduce((amount, item) => {
     return amount + item.amount;
   }, 0);
-  return (
-    <div className={style.fixed_Header}>
-      {/* upper header */}
 
-      <div>
-        <div className={style.header_container}>
-          <div className={style.logo_container}>
-            {/* Amazon logo */}
-            <Link to="/">
-              <img
-                src="https://pngimg.com/uploads/amazon/amazon_PNG11.png"
-                alt="amazon_Logo"
-              />
-            </Link>
-            {/* Delivery  */}
-            <div className={style.delivery}>
-              <span>
-                {/* Location icon */}
-                <SlLocationPin size={15} />
-              </span>
-              <div>
-                <p>Deliver to</p>
-                <span>Ethiopia</span>
+  return (
+    <>
+      <section className={classes.fixed}>
+        <section>
+          {/* Header  Container*/}
+          <div className={classes.header__container}>
+            {/* Logo and DeliverContent Container */}
+            <div className={classes.logo__container}>
+              {/* Logo */}
+              <Link to="/">
+                <img
+                  src="https://pngimg.com/uploads/amazon/small/amazon_PNG11.png"
+                  alt=""
+                />
+              </Link>
+
+              {/* Delivery Content */}
+              <div className={classes.delivery}>
+                <span>
+                  {/* Location Icon */}
+                  <SlLocationPin />
+                </span>
+                <div className={classes.delivery__details}>
+                  <p>Delivered To</p>
+                  <span>Ethiopia</span>
+                </div>
               </div>
             </div>
-          </div>
-          {/* Search bar */}
-          <div className={style.search}>
-            <select name="/public/3.open_cart.png" id="cart">
-              <option value="">All</option>
-              <option value="">Electronics</option>
-              <option value="">Computer</option>
-              <option value="">Phones</option>
-              <option value="">Clothes</option>
-              <option value="">Books</option>
-            </select>
-            <input type="text" name="" placeholder="Search Amazon" />
-            {/*Search icon */}
-            <BsSearch size={25} />
-          </div>
-          <div className={style.order_container}>
-            <Link to="" className={style.language}>
-              <img src="/public/2.English_Language.png" alt="Language" />
-              <select name="" id="">
-                <option value="en">EN</option>
-                <option value="am">አማ</option>
-              </select>
-            </Link>
-            <Link to="/auth">
-              <div className="">
-                <p>Hello,sign in </p>
-                <span>Account and List</span>
-              </div>
-            </Link>
-            <Link to="/orders" className={style.return}>
-              <p>Returns</p>
-              <span> & orders</span>
-            </Link>
-            <Link to="/cart" className={style.cart}>
-              <img className={style.cart} src="/public/cart2.png" alt="" />
-              <span>{totalItem}</span>
-              {/* <div>Cart</div> */}
-            </Link>
-          </div>
-        </div>
-      </div>
 
-      {/* lower header */}
-      <div>
+            {/* Searching */}
+            <div className={classes.search}>
+              <select name="" id="">
+                <option value="">All</option>
+              </select>
+
+              <input type="text" name="" id="" placeholder="Search Product" />
+
+              {/* Search Icon */}
+              <FaSearch size={38} />
+            </div>
+
+            {/* right Side Icons */}
+            <div className={classes.order__container}>
+              <a to="" className={classes.language}>
+                <img
+                  src="https://upload.wikimedia.org/wikipedia/en/thumb/a/a4/Flag_of_the_United_States.svg/1024px-Flag_of_the_United_States.svg.png"
+                  alt=""
+                />
+                <select name="" id="">
+                  <option value="">EN</option>
+                  <option value="">Ch</option>
+                  <option value="">JP</option>
+                </select>
+              </a>
+
+              <Link to={!user ? "/auth" : "/"}>
+                <div>
+                  {user ? (
+                    <>
+                      <p>Hello, {user.email.split("@")[0]}</p>
+                      <span onClick={() => auth.signOut()}>Sign Out</span>
+                    </>
+                  ) : (
+                    <>
+                      <p>Hello, Sign in</p>
+                      <span>Account & Lists</span>
+                    </>
+                  )}
+                </div>
+              </Link>
+
+              <Link to="/orders">
+                <p>Returns</p>
+                <span>& Orders</span>
+              </Link>
+
+              <Link to="/cart" className={classes.cart}>
+                <BiCartAdd size={38} />
+                {/* <span>{basket?.length}</span> */}
+                <span>{totalItem}</span>
+              </Link>
+              <span>Cart</span>
+            </div>
+          </div>
+        </section>
         <LowerHeader />
-      </div>
-      {/* <div>lower container</div> */}
-    </div>
+      </section>
+    </>
   );
 }
 

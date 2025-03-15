@@ -5,6 +5,7 @@ import { Type } from "./action.type";
 export const initialState = {
   // Initial state of the basket is an empty array
   basket: [],
+  user: null,
 };
 
 // Reducer function that takes in the current state and an action
@@ -57,6 +58,16 @@ export const reducer = (state, action) => {
       // Return a new state with the updated basket
       return { ...state, basket: newBasket };
 
+    case Type.SET_USER:
+      return {
+        ...state,
+        user: action.user,
+      };
+    case Type.EMPTY_BASKET:
+      return {
+        ...state,
+        basket: [],
+      };
     // Default case to handle any other action types
     default:
       // Return the current state
